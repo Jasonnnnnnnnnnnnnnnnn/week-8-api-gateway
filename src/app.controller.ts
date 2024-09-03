@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import axios from 'axios';
-import { ClientProxy } from '@nestjs/microservices';
+
+
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService , @Inject('MATH_SERVICE') private client: ClientProxy,) {
+  constructor(private readonly appService: AppService ) {
     
    }
 
@@ -16,27 +16,11 @@ export class AppController {
 
   @Post('sum1')
   async sum1(@Body('numbers') numbers: number[]): Promise<number> {
-    try {
-      const response = await axios.post('http://localhost:3001/math/sum', { 
-        numbers,
-       });
-       return response.data;
-    } catch(error) {
-      console.error('Error calling the microservice', error);
-      throw error;
-    }
+    return this.appService.sum1(numbers);
   }
 
   @Post('sum2')
-  async sum2(@Body('numbers') numbers: number[]): Promise<number> {
-    try {
-      const response = await axios.post('http://localhost:3001/math/sum', { 
-        numbers,
-       });
-       return response.data;
-    } catch(error) {
-      console.error('Error calling the microservice', error);
-      throw error;
-    }
+  async sum2(@Body('numbers') numbers: number[]) {
+    return this.appService.sum2(numbers);
   }
 }
